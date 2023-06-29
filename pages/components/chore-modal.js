@@ -38,6 +38,3 @@ const UserModal = ({ isOpen, onClose, choreId }) => {
 };
 
 export default UserModal;
-
-
-{/* <button onClick={onClose}>Close Modal</button> */}
