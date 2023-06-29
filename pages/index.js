@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react";// Import CSS for styling
+import React, { useEffect, useState } from "react";
+import UserModal from "./components/chore-modal";
 
 const Home = () => {
   const [choresMap, setChoresMap] = useState(new Map());
-  const [selectedChore, setSelectedChore] = useState(null);
+  const [selectedChoreId, setSelectedChoreId] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://chores-app-api-3550fe946076.herokuapp.com/chores');
+        const response = await fetch(
+          "https://chores-app-api-3550fe946076.herokuapp.com/chores"
+        );
         const data = await response.json();
 
         const map = new Map();
-        data.forEach(chore => {
+        data.forEach((chore) => {
           map.set(chore._id, chore);
         });
 
@@ -25,19 +29,20 @@ const Home = () => {
   }, []);
 
   const openModal = (choreId) => {
-    const selectedChore = choresMap.get(choreId);
-    setSelectedChore(selectedChore);
+    setSelectedChoreId(choreId);
+    setModalIsOpen(true);
   };
 
   const closeModal = () => {
-    setSelectedChore(null);
+    setSelectedChoreId(null);
+    setModalIsOpen(false);
   };
 
   return (
     <div className="home-container">
-      <h1>Home</h1>
+      <h1>Chores</h1>
       <div className="grid-container">
-        {[...choresMap.values()].map(chore => (
+        {[...choresMap.values()].map((chore) => (
           <div
             className="grid-item"
             key={chore._id}
@@ -48,19 +53,11 @@ const Home = () => {
           </div>
         ))}
       </div>
-      {selectedChore && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>{selectedChore.choreName}</h2>
-            <ul>
-              {selectedChore.names.map(name => (
-                <li key={name}>{name}</li>
-              ))}
-            </ul>
-            <button onClick={closeModal}>Close</button>
-          </div>
-        </div>
-      )}
+      <UserModal
+        isOpen={modalIsOpen}
+        onClose={closeModal}
+        choreId={selectedChoreId}
+      />
     </div>
   );
 };
