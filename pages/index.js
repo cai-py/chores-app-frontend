@@ -50,7 +50,7 @@ const Home = () => {
           >
             <h3>{chore.choreName}</h3>
             <p>Points: {chore.points}</p>
-            <p>id {chore._id}</p>
+            {/* <p>id {chore._id}</p> */}
           </div>
         ))}
       </div>
